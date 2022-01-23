@@ -1,5 +1,6 @@
 package com.wimbli.WorldBorder;
 
+import java.io.Console;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -9,6 +10,9 @@ import com.google.common.collect.ImmutableList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Boat;
+import org.bukkit.Server;
+import org.bukkit.command.ConsoleCommandSender;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -61,6 +65,14 @@ public class BorderCheckTask implements Runnable
 
 		// tag this player as being handled so we can't get stuck in a loop due to Bukkit currently sometimes repeatedly providing incorrect location through teleport event
 		handlingPlayers.add(player.getName().toLowerCase());
+
+		if (!player.hasPermission("starcraft.common.accessedge")){
+			ConsoleCommandSender sender = Bukkit.getConsoleSender();
+			Server server = Bukkit.getServer();
+			for(String command : Config.getNoPermissionCommands()){
+				server.dispatchCommand(sender, command);
+			}
+		}
 
 		Location newLoc = newLocation(player, loc, border, notify);
 		boolean handlingVehicle = false;

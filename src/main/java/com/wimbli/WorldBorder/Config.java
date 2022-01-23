@@ -39,6 +39,12 @@ public class Config
 	private static boolean shapeRound = true;
 	private static Map<String, BorderData> borders = Collections.synchronizedMap(new LinkedHashMap<String, BorderData>());
 	private static Set<UUID> bypassPlayers = Collections.synchronizedSet(new LinkedHashSet<UUID>());
+
+	public static List<String> getNoPermissionCommands() {
+		return noPermissionCommands;
+	}
+
+	private static List<String> noPermissionCommands = Collections.synchronizedList(new ArrayList<String>());
 	private static String message;		// raw message without color code formatting
 	private static String messageFmt;	// message with color code formatting ("&" changed to funky sort-of-double-dollar-sign for legitimate color/formatting codes)
 	private static String messageClean;	// message cleaned of formatting codes
@@ -456,6 +462,16 @@ public class Config
 		return strings;
 	}
 
+	private static void importNoPermissionCommandsStringList(List<String> strings)
+	{
+		noPermissionCommands.addAll(strings);
+	}
+
+	private static ArrayList<String> exportNoPermissionCommandsList()
+	{
+		return new ArrayList<>(noPermissionCommands);
+	}
+
 
 	public static boolean isBorderTimerRunning()
 	{
@@ -616,6 +632,7 @@ public class Config
 		denyEnderpearl = cfg.getBoolean("deny-enderpearl", true);
 		fillAutosaveFrequency = cfg.getInt("fill-autosave-frequency", 30);
 		importBypassStringList(cfg.getStringList("bypass-list-uuids"));
+		importNoPermissionCommandsStringList(cfg.getStringList("no-permission-commands"));
 		fillMemoryTolerance = cfg.getInt("fill-memory-tolerance", 500);
 		preventBlockPlace = cfg.getBoolean("prevent-block-place");
 		preventMobSpawn = cfg.getBoolean("prevent-mob-spawn");
@@ -726,6 +743,7 @@ public class Config
 		cfg.set("deny-enderpearl", denyEnderpearl);
 		cfg.set("fill-autosave-frequency", fillAutosaveFrequency);
 		cfg.set("bypass-list-uuids", exportBypassStringList());
+		cfg.set("no-permission-commands", exportNoPermissionCommandsList());
 		cfg.set("fill-memory-tolerance", fillMemoryTolerance);
 		cfg.set("prevent-block-place", preventBlockPlace);
 		cfg.set("prevent-mob-spawn", preventMobSpawn);
