@@ -65,12 +65,10 @@ public class BorderCheckTask implements Runnable
 
 		// tag this player as being handled so we can't get stuck in a loop due to Bukkit currently sometimes repeatedly providing incorrect location through teleport event
 		handlingPlayers.add(player.getName().toLowerCase());
-
 		if (!player.hasPermission("starcraft.common.accessedge")){
 			ConsoleCommandSender sender = Bukkit.getConsoleSender();
-			Server server = Bukkit.getServer();
 			for(String command : Config.getNoPermissionCommands()){
-				server.dispatchCommand(sender, command);
+				Bukkit.dispatchCommand(sender, command.replaceAll("%player%", player.getName()));
 			}
 		}
 
